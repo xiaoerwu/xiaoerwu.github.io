@@ -1,0 +1,1276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>林安亚的博客</title>
+    <link>http://painterlin.com</link>
+    <description>My personal blog</description>
+    
+      <item>
+        <title>QEMU代码分析</title>
+        <link>http://painterlin.com/2016/03/20/qemu-notes.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/20/qemu-notes.html</guid>
+        <pubDate>Sun, 20 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h2&gt;函数调用关系&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;cpu&lt;em&gt;exec &amp;lt;-- tcg&lt;/em&gt;cpu&lt;em&gt;exec &amp;lt;-- tcg&lt;/em&gt;exec&lt;em&gt;all &amp;lt;--  qemu&lt;/em&gt;tcg&lt;em&gt;cpu&lt;/em&gt;thread&lt;em&gt;fn &amp;lt;-- qemu&lt;/em&gt;tcg&lt;em&gt;init&lt;/em&gt;vcpu &amp;lt;-- qemu&lt;em&gt;init&lt;/em&gt;vcpu &amp;lt;-- arm&lt;em&gt;cpu&lt;/em&gt;realizefn
+&amp;lt;-- arm&lt;em&gt;cpu&lt;/em&gt;class_init &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;main函数之前调用的函数&lt;/h2&gt;
+
+&lt;p&gt;在QEMU源码中,在main函数执行,通过C语言中constructor机制(![constructor])先执行了如下初始化函数&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;qtest&lt;em&gt;type&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;memory&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;uart&lt;/em&gt;register&lt;/p&gt;
+
+&lt;p&gt;digic&lt;em&gt;uart&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;stm32f2xx&lt;em&gt;usart&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;serial&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;arm11mpcore&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;realview&lt;em&gt;mpcore&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;a9mp&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;a15mp&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;gpu&lt;/em&gt;pci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;dma&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;omap&lt;em&gt;gpio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;gpio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;omap&lt;em&gt;i2c&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;armv7m&lt;em&gt;nvic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;gic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;irq&lt;/em&gt;gate&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;combiner&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;omap&lt;em&gt;intc&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;aw&lt;em&gt;a10&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ivshmem&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;sysctl&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;pmu&lt;/em&gt;register&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;ccm&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;mst&lt;em&gt;fpga&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;zynq&lt;em&gt;slcr&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;zynq&lt;em&gt;xadc&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;stm32f2xx&lt;em&gt;syscfg&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;edu&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;pcmcia&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;mct&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;pwm&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;rtc&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;timer&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;tusb6010&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;digic&lt;em&gt;timer&lt;/em&gt;register_type&lt;/p&gt;
+
+&lt;p&gt;a10&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register&lt;em&gt;vfio&lt;/em&gt;pci&lt;em&gt;dev&lt;/em&gt;type&lt;/p&gt;
+
+&lt;p&gt;register&lt;em&gt;vfio&lt;/em&gt;platform&lt;em&gt;dev&lt;/em&gt;type&lt;/p&gt;
+
+&lt;p&gt;register&lt;em&gt;calxeda&lt;/em&gt;xgmac&lt;em&gt;dev&lt;/em&gt;type&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;linux&lt;/em&gt;boot&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;collie&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;exynos4&lt;em&gt;machines&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;gumstix&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;highbank&lt;em&gt;regs&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;calxeda&lt;em&gt;machines&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;canon&lt;em&gt;a1100&lt;/em&gt;machine&lt;em&gt;init&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;integratorcp&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;integratorcp&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;mainstone2&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;musicpal&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;musicpal&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;nseries&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;sx1&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;palmte&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;realview&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;spitz&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;spitz&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;stellaris&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;stellaris&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;tosapda&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;tosa&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;versatile&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;versatilepb&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;vexpress&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;machvirt&lt;em&gt;machine&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;zynq&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;z2&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;netduino2&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;armv7m&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;gpio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pxa2xx&lt;em&gt;pic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;digic&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;strongarm&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;aw&lt;em&gt;a10&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;cubieboard&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;stm32f205&lt;em&gt;soc&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;fsl&lt;em&gt;imx25&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx25&lt;em&gt;pdk&lt;/em&gt;machine&lt;em&gt;init&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;fsl&lt;em&gt;imx31&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;kzm&lt;em&gt;machine&lt;/em&gt;init&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;cpu&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;iothread&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;qjson&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register&lt;em&gt;accel&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;fsdev&lt;em&gt;register&lt;/em&gt;config&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;es1370&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ac97&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;intel&lt;em&gt;hda&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;hda&lt;em&gt;audio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;wm8750&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl041&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;mv88w8618&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;m25p80&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;nand&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pflash&lt;em&gt;cfi01&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pflash&lt;em&gt;cfi02&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;onenand&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;nvme&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ipoctal&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl011&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;serial&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;serial&lt;em&gt;pci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtconsole&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;cadence&lt;em&gt;uart&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;serial&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;qdev&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;fw&lt;em&gt;path&lt;/em&gt;provider&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;irq&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;hotplug&lt;em&gt;handler&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;nmi&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;sysbus&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;machine&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;machine&lt;em&gt;none&lt;/em&gt;machine&lt;em&gt;init&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;platform&lt;em&gt;bus&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ads7846&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl110&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ssd0303&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ssd03232&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;vga&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;fimd&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pl080&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl330&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;max7310&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl061&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;scoop&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;i2c&lt;em&gt;slave&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;smbus&lt;em&gt;device&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;smbus&lt;em&gt;eeprom&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;versatile&lt;em&gt;i2c&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;bitbang&lt;em&gt;i2c&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;exynos4210&lt;em&gt;i2c&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;i2c&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ide&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;ide&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;microdrive&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;sysbus&lt;em&gt;ahci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ich&lt;em&gt;ahci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;lm832x&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl050&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl190&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;avic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;realview&lt;em&gt;gic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;gic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;gicv2m&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ipack&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;tpci200&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;isabus&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;max111x&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;tmp105&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;testdev&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;l2x0&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;intdbg&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;a9mp&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;arm11&lt;em&gt;scu&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ne2000&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;eepro100&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;pcnet&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;e1000&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;rtl8139&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;vmxnet3&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;smc91c111&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;lan9118&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;xgmac&lt;em&gt;enet&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;aw&lt;em&gt;emac&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;fec&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;gem&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;stellaris&lt;em&gt;enet&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;rocker&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;fw&lt;em&gt;cfg&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;bridge&lt;/em&gt;dev_register&lt;/p&gt;
+
+&lt;p&gt;pxb&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;xio3130&lt;em&gt;upstream&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;xio3130&lt;em&gt;downstream&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ioh3420&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;d2pbr_register&lt;/p&gt;
+
+&lt;p&gt;versatile&lt;em&gt;pci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;gpex_register&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;bridge&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pci&lt;em&gt;host&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pcie&lt;em&gt;host&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pcie&lt;em&gt;port&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pcmcia&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;scsi&lt;em&gt;disk&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;scsi&lt;em&gt;generic&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;scsi&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;lsi53c895a&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;megasas&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pvscsi&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;esp&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;esp&lt;em&gt;pci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;pl181&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ssi&lt;em&gt;sd&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;sdhci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;smbios&lt;em&gt;register&lt;/em&gt;config&lt;/p&gt;
+
+&lt;p&gt;pl022&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ssi&lt;em&gt;slave&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;xilinx&lt;em&gt;spips&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;timer&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;arm&lt;em&gt;mptimer&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;a9&lt;em&gt;gtimer&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;cadence&lt;em&gt;ttc&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ds1338&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;pl031&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;twl92230&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;epit&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;imx&lt;em&gt;gpt&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;stm32f2xx&lt;em&gt;timer&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;tpm&lt;em&gt;passthrough&lt;/em&gt;register&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;uhci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ohci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;ehci&lt;em&gt;pci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ehci&lt;em&gt;sysbus&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;xhci&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;hub&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;hid&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;wacom&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;msd&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;uas&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;audio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;serial&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;net&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;bt&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;ccid&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;usb&lt;em&gt;mtp&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;pci&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;virtio&lt;em&gt;mmio&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;i6300esb&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;filter&lt;em&gt;dump&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;cpu&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;vnc&lt;em&gt;register&lt;/em&gt;config&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;container&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;raw&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;qcow&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;vdi&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;vmdk&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;cloop&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;bochs&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;vpc&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;vvfat&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;qcow2&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;qed&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;quorum&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;parallels&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;blkdebug&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;blkverify&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;file&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;null&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;throttle&lt;em&gt;groups&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;nbd&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;sheepdog&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;bdrv&lt;em&gt;dmg&lt;/em&gt;init&lt;/p&gt;
+
+&lt;p&gt;qcrypto&lt;em&gt;tls&lt;/em&gt;creds&lt;em&gt;register&lt;/em&gt;types&lt;/p&gt;
+
+&lt;p&gt;qcrypto&lt;em&gt;tls&lt;/em&gt;creds&lt;em&gt;anon&lt;/em&gt;register_types&lt;/p&gt;
+
+&lt;p&gt;qcrypto&lt;em&gt;tls&lt;/em&gt;creds&lt;em&gt;x509&lt;/em&gt;register_types&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>C语言中constructor和destructor的用法</title>
+        <link>http://painterlin.com/2016/03/20/c-language-attribute-constructor-destructor.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/20/c-language-attribute-constructor-destructor.html</guid>
+        <pubDate>Sun, 20 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;__ attribute __((constructor)): 在main函数被调用之前调用
+注:调用之前，各个全局变量已经完成初始化。也就是说，这些函数是在全局变量初始化之后，main函数之前调用的。这一点是非常重要的，否则可能会引起很多的问题。&lt;/p&gt;
+
+&lt;p&gt;__ attribute __((destructor)):  在main函数被调用之后调用&lt;/p&gt;
+
+&lt;p&gt;例子&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;stdio.h&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;__attribute__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;before_main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;before main&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+ &lt;span class=&quot;n&quot;&gt;__attribute__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;destructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;after_main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;after main&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/* 主函数 */&lt;/span&gt;
+ &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;in main&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;参考:
+&lt;a href=&quot;http://www.cnblogs.com/Anker/p/3462363.html&quot;&gt;&lt;strong&gt;attribute&lt;/strong&gt;中constructor和destructor[总结]&lt;/a&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>CS专业经典课程书籍</title>
+        <link>http://painterlin.com/2016/03/18/reading-books.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/18/reading-books.html</guid>
+        <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h5&gt;Computer&lt;em&gt;Systems-A&lt;/em&gt;Programmers_Perspective(3rd)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: Randal E. Bryan &amp;amp; David R. O Hallaron
+Publish Date: 2016
+&lt;img src=&quot;https://img1.doubanio.com/lpic/s28051018.jpg&quot; alt=&quot;omputer Systems - A programmers perspective&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5&gt;Operating System Concepts(9th)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: Abraham Silberschatz &amp;amp; Peter Bare Galvin &amp;amp; Greg Gagne
+Publish Date: 2013
+&lt;img src=&quot;https://img3.doubanio.com/lpic/s23003281.jpg&quot; alt=&quot;Operating System Concepts&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5&gt;Computer Organization and Design(5th)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: David A. Patterson &amp;amp; John L. Hennessy
+Publish Date: 2014
+&lt;img src=&quot;https://img3.doubanio.com/lpic/s27212095.jpg&quot; alt=&quot;Computer Organization and Design&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>Ubuntu下scikit-learning包的安装</title>
+        <link>http://painterlin.com/2016/03/18/scikit-learning-install.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/18/scikit-learning-install.html</guid>
+        <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h2&gt;scikit-learn工具包安装&lt;/h2&gt;
+
+&lt;h5&gt;下载地址&lt;/h5&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;https://pypi.python.org/pypi/scikit-learn/0.17.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;解压&lt;/h5&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ tar zxvf scikit-learn-0.17.1.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;安装&lt;/h5&gt;
+
+&lt;p&gt;从源码安装scikit-learn时,依赖numpy和scipy, 因此需要先安装numpy和scipy
+&lt;code&gt;
+$ python setup.py build
+$ sudo python setup.py install
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5&gt;测试&lt;/h5&gt;
+
+&lt;p&gt;安装完成后,在源代码目录外的其他地方启动测试(注:需要安装nose包):
+&lt;code&gt;
+$ nosetests -v sklearn
+&lt;/code&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>CS专业经典课程书籍</title>
+        <link>http://painterlin.com/2016/03/18/reading-books.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/18/reading-books.html</guid>
+        <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h5&gt;Computer&lt;em&gt;Systems-A&lt;/em&gt;Programmers_Perspective(3rd)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: Randal E. Bryan &amp;amp; David R. O Hallaron
+Publish Date: 2016
+&lt;img src=&quot;https://img1.doubanio.com/lpic/s28051018.jpg&quot; alt=&quot;omputer Systems - A programmers perspective&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5&gt;Operating System Concepts(9th)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: Abraham Silberschatz &amp;amp; Peter Bare Galvin &amp;amp; Greg Gagne
+Publish Date: 2013
+&lt;img src=&quot;https://img3.doubanio.com/lpic/s23003281.jpg&quot; alt=&quot;Operating System Concepts&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5&gt;Computer Organization and Design(5th)&lt;/h5&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Author: David A. Patterson &amp;amp; John L. Hennessy
+Publish Date: 2014
+&lt;img src=&quot;https://img3.doubanio.com/lpic/s27212095.jpg&quot; alt=&quot;Computer Organization and Design&quot;&gt;
+状态: 在读&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>web scraping常用Python库</title>
+        <link>http://painterlin.com/2016/03/13/web-scraping.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/13/web-scraping.html</guid>
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h2&gt;web scraping常用python库&lt;/h2&gt;
+
+&lt;p&gt;常用的python库有urllib, urlopen, BeautifulSoup等&lt;/p&gt;
+
+&lt;h3&gt;urllib:&lt;/h3&gt;
+
+&lt;p&gt;标准的python库(即不需要额外的安装该库), 其中包含请求网页数据, 处理cookies, 甚至改变诸如headers和用户代理的元数据的函数&lt;/p&gt;
+
+&lt;h3&gt;urlopen:&lt;/h3&gt;
+
+&lt;p&gt;通过网络打开一个远程对象,并读取.它是一个非常通用的库(可以读取HTML文件, 图像文件,或其他文件流), 后续会频繁的用到该函数.&lt;/p&gt;
+
+&lt;h3&gt;BeautifulSoup:&lt;/h3&gt;
+
+&lt;h4&gt;安装BeautifulSoup&lt;/h4&gt;
+
+&lt;p&gt;对于Linux系统&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;sudo apt-get install python-bs4&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;对于MAC系统
+首先安装python包管理工具pip&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;sudo easy_install pip&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;然后通过pip安装BeautifulSoup&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;pip install beautifulsoup4&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当安装BeautifulSoup包时,需要按照如下方式安装,不然可能会安装在python 2.x, 而不是python 3.x&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;sudo python3 setup.py install&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;若使用的是pip来安装,需要使用pip3来安装python 3.x版本的包&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;pip3 install beautifulsoup4&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;安装完后,在python中就能识别该BeautifulSoup库了&lt;/p&gt;
+
+&lt;h4&gt;BeautifulSoup包测试&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;from bs4 import BeautifulSoup&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;若没有出现找不到该库的错误,则说明安装成功&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Traceback (most recent call last):
+     File &amp;quot;&lt;stdin&gt;&amp;quot;, line 1, in &lt;module&gt;
+     ImportError: cannot import name &amp;#39;BeautifulSoup&amp;#39;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4&gt;BeautifulSoup包的使用&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;   &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib.request&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;
+   &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;bs4&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.pythonscraping.com/exercises/exercise1.html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;bsObj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bsObj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;程序输出:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;h1&gt;An Interesting Title&lt;h1&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>VIM阅读源代码常用命令</title>
+        <link>http://painterlin.com/2016/03/13/vim-common-commands.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/13/vim-common-commands.html</guid>
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h3&gt;&amp;quot;[[&amp;quot;和&amp;quot;]]&amp;quot;&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;[[: 跳转到当前光标所在位置的函数头
+]]: 跳转到当前光标所在位置的函数尾
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;创建/打开/保存文件:&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;:new file.extension  --- 新建文件
+:e file              --- 打开文件
+:w file              --- 保存文件
+:wq                  --- 保存退出
+:x                   --- 退出, 如果文件已修改则保存
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;删除操作&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;dw  --- 删除光标之后的单词剩余部分。
+d$  --- 删除光标之后的该行剩余部分。
+dd  --- 删除当前行。
+
+c   --- 功能和d相同，区别在于完成删除操作后进入INSERT MODE
+cc  --- 也是删除当前行，然后进入INSERT MODE
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;参考文档&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://tuxdiary.com/2015/02/15/yavide/&quot;&gt;yavide: modern C C++ IDE over vim(经典的把VIM改造为IDE工具)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>Eclipse调试代码常用快捷键</title>
+        <link>http://painterlin.com/2016/03/13/eclpise-common-commands.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/13/eclpise-common-commands.html</guid>
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h2&gt;调试(Debug)&lt;/h2&gt;
+
+&lt;h6&gt;查找函数的所有引用&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;方法一:
+右击-&amp;gt;Reference-&amp;gt;Workspace&lt;/p&gt;
+
+&lt;p&gt;方法二:
+快捷键:Shift + Ctrl + G&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;单步执行(遇到函数,进入函数单步执行)&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;快捷键:F5&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;单步执行(遇到函数,跳过该函数)&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;快捷键:F6&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;单步返回(执行函数到中间时,可以跳过该函数)&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;快捷键:F7&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;运行至行(超好用，可以节省好多的断点)&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Ctrl+R &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;继续&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;快捷键:F8&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;显示变量的值&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Ctrl+Shift+D&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6&gt;在当前行设置或者去掉断点&lt;/h6&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Ctrl+Shift+B &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://rongmayisheng.com/post/eclipse%E6%9C%80%E6%9C%89%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE%E6%95%B4%E7%90%86&quot;&gt;eclipse最有用快捷键整理&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>Longest Substring Without Repeating Characters</title>
+        <link>http://painterlin.com/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</guid>
+        <pubDate>Sat, 05 Mar 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h2&gt;题目&lt;/h2&gt;
+
+&lt;p&gt;Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for &amp;quot;abcabcbb&amp;quot; is &amp;quot;abc&amp;quot;, which the length is 3. For &amp;quot;bbbbb&amp;quot; the longest substring is &amp;quot;b&amp;quot;, with the length of 1.&lt;/p&gt;
+
+&lt;h2&gt;答案&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lengthOfLongestSubstring&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ASIC_MAX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;256&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;signed&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;short&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ASIC_MAX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 记录字符串上次出现的问题
+&lt;/span&gt;        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// 记录当前字符子串的起始位置
+&lt;/span&gt;        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ASIC_MAX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 数组内容填充为-1
+&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;// 针对整个字符串没有重复的情况,需要做如下判断
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;本文参考：&lt;a href=&quot;https://leetcode.com/problems/longest-substring-without-repeating-characters/&quot;&gt;https://leetcode.com/problems/longest-substring-without-repeating-characters/&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>读书方法</title>
+        <link>http://painterlin.com/2016/01/27/methods-of-read-books.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/27/methods-of-read-books.html</guid>
+        <pubDate>Wed, 27 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;当前读了很多数，手机中下载了很多的专业电子书，时不时的回去阅读，但是回头来看，却发现这些书的内容一点也记不起来。因此就在思考书该怎么看，才能从书中吸取对自己有价值的成分。如何摒弃粗制滥造的没有营养的书本。以下针对不同的读书目的应该有不同的读书方法，&lt;/p&gt;
+
+&lt;h3&gt;系统性的阅读&lt;/h3&gt;
+
+&lt;p&gt;这种方式的读书目的，是为了构建自己的知识体系结构，针对这种目的，需要系统的整本整本的把经典的书籍阅读完，此处强调要是经典的书。现在不管哪方面的书籍，市面上各种各样的琳琅满目， 因此，若是系统性的阅读书籍的话，选择经典型的书籍来阅读。&lt;/p&gt;
+
+&lt;p&gt;同时，列一个读书计划，每一个月应该读完什么书，每一个年应该完成多少本书本的阅读，以此来积累知识，构建完整的知识体系结构。&lt;/p&gt;
+
+&lt;p&gt;阅读的同时，需要善做记录，进行总结。&lt;/p&gt;
+
+&lt;h3&gt;针对性的阅读&lt;/h3&gt;
+
+&lt;p&gt;这种方式是为了解决某个问题，需要针对该问题的相关书籍进行阅读，那么就不需要从头开始阅读，只要对相关的内容进行阅读即可。可以节省时间。&lt;/p&gt;
+
+&lt;p&gt;对于这种方式的阅读，每完成一个问题的解决，就要针对该问题的相关内容进行总结，这样才能慢慢的积累。便于专业技能的提升。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>读书方法</title>
+        <link>http://painterlin.com/2016/01/27/methods-of-read-books.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/27/methods-of-read-books.html</guid>
+        <pubDate>Wed, 27 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;当前读了很多数，手机中下载了很多的专业电子书，时不时的回去阅读，但是回头来看，却发现这些书的内容一点也记不起来。因此就在思考书该怎么看，才能从书中吸取对自己有价值的成分。如何摒弃粗制滥造的没有营养的书本。以下针对不同的读书目的应该有不同的读书方法，&lt;/p&gt;
+
+&lt;h3&gt;系统性的阅读&lt;/h3&gt;
+
+&lt;p&gt;这种方式的读书目的，是为了构建自己的知识体系结构，针对这种目的，需要系统的整本整本的把经典的书籍阅读完，此处强调要是经典的书。现在不管哪方面的书籍，市面上各种各样的琳琅满目， 因此，若是系统性的阅读书籍的话，选择经典型的书籍来阅读。&lt;/p&gt;
+
+&lt;p&gt;同时，列一个读书计划，每一个月应该读完什么书，每一个年应该完成多少本书本的阅读，以此来积累知识，构建完整的知识体系结构。&lt;/p&gt;
+
+&lt;p&gt;阅读的同时，需要善做记录，进行总结。&lt;/p&gt;
+
+&lt;h3&gt;针对性的阅读&lt;/h3&gt;
+
+&lt;p&gt;这种方式是为了解决某个问题，需要针对该问题的相关书籍进行阅读，那么就不需要从头开始阅读，只要对相关的内容进行阅读即可。可以节省时间。&lt;/p&gt;
+
+&lt;p&gt;对于这种方式的阅读，每完成一个问题的解决，就要针对该问题的相关内容进行总结，这样才能慢慢的积累。便于专业技能的提升。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>函数以及变量python练习</title>
+        <link>http://painterlin.com/2016/01/26/python-ex25-even-more-practice.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/26/python-ex25-even-more-practice.html</guid>
+        <pubDate>Tue, 26 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;以下将对函数和变量的学习做更多的练习，以便很好的理解它们是如何使用的。&lt;/p&gt;
+
+&lt;h4&gt;程序源代码&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;break_words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stuff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;This function will break up words for us&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stuff&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sort_words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Sorts the words.&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_first_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Prints the first word after popping it off&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_last_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Prints the last word after popping it off&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;
+    
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sort_sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Takes in a full sentence and returns the sorted words&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;break_words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sort_words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_first_and_last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Prints the first and last words of the sentence&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;break_words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print_first_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print_last_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_first_and_last_sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Sorted the words the prints the first and last one&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sort_sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print_first_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;print_last_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h4&gt;运行方式以及结果&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;fantasy@fantasy:~/python_src$ python
+Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
+[GCC 4.8.2] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import ex25_even_more_practice
+&amp;gt;&amp;gt;&amp;gt; sentence = &quot;All good things come to those who wait&quot;
+&amp;gt;&amp;gt;&amp;gt; words = ex25_even_more_practice.break_words(sentence)
+&amp;gt;&amp;gt;&amp;gt; words
+[&#39;All&#39;, &#39;good&#39;, &#39;things&#39;, &#39;come&#39;, &#39;to&#39;, &#39;those&#39;, &#39;who&#39;, &#39;wait&#39;]
+&amp;gt;&amp;gt;&amp;gt; sorted_words = ex25_even_more_practice.sort_words(words)
+&amp;gt;&amp;gt;&amp;gt; sorted_words
+[&#39;All&#39;, &#39;come&#39;, &#39;good&#39;, &#39;things&#39;, &#39;those&#39;, &#39;to&#39;, &#39;wait&#39;, &#39;who&#39;]
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_first_word(words)
+All
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_last_word(words)
+wait
+&amp;gt;&amp;gt;&amp;gt; words
+[&#39;good&#39;, &#39;things&#39;, &#39;come&#39;, &#39;to&#39;, &#39;those&#39;, &#39;who&#39;]
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_first_word(sorted_words)
+All
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_last_word(sorted_words)
+who
+&amp;gt;&amp;gt;&amp;gt; sorted_word
+Traceback (most recent call last):
+  File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+NameError: name &#39;sorted_word&#39; is not defined
+&amp;gt;&amp;gt;&amp;gt; sorted_words
+[&#39;come&#39;, &#39;good&#39;, &#39;things&#39;, &#39;those&#39;, &#39;to&#39;, &#39;wait&#39;]
+&amp;gt;&amp;gt;&amp;gt; sorted_words = ex25_even_more_practice.sort_sentence(sentence)
+&amp;gt;&amp;gt;&amp;gt; sorted_words
+[&#39;All&#39;, &#39;come&#39;, &#39;good&#39;, &#39;things&#39;, &#39;those&#39;, &#39;to&#39;, &#39;wait&#39;, &#39;who&#39;]
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_first_and_last(sentence)
+All
+wait
+&amp;gt;&amp;gt;&amp;gt; ex25_even_more_practice.print_first_and_last_sorted(sentence)
+All
+who
+&amp;gt;&amp;gt;&amp;gt; 
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      </item>
+    
+      <item>
+        <title>机器学习/数据挖掘/自然语言处理课程</title>
+        <link>http://painterlin.com/2016/01/24/machine-learning-course.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/machine-learning-course.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;收集当前国外比较有名的机器学习，数据挖掘，自然语言处理，大数据，以及深度学习方面的课程，便于后面学习&lt;/p&gt;
+
+&lt;h3&gt;机器学习&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;stanford： &lt;a href=&quot;http://cs229.stanford.edu/&quot;&gt;cs229:machine learning&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;数据挖掘&lt;/h3&gt;
+
+&lt;h3&gt;自然语言处理&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224u/&quot;&gt;cs224u:natural langauge understanding&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224n/&quot;&gt;cs224n:natural language processing&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;深度学习&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;http://ufldl.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/li&gt;
+&lt;li&gt;http://deeplearning.net/&lt;/li&gt;
+&lt;li&gt;http://deeplearning.stanford.edu/tutorial/&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>武汉出差</title>
+        <link>http://painterlin.com/2016/01/24/on-business-in-wuhan.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/on-business-in-wuhan.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;2015.12.1 ~ 2016.1.29: 出差武汉&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;以下谨记&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;h4&gt;宁静致远&lt;/h4&gt;
+
+&lt;h4&gt;潜心学习&lt;/h4&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;日常安排&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;努力工作&lt;/li&gt;
+&lt;li&gt;锻炼身体&lt;/li&gt;
+&lt;li&gt;多看书，多学习&lt;/li&gt;
+&lt;li&gt;多做，少说&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;下一步&lt;/h3&gt;
+
+&lt;p&gt;提升专业技能&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>漂亮的女孩</title>
+        <link>http://painterlin.com/2016/01/24/girlfriend.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/girlfriend.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;&lt;img src=&quot;/public/img/girlfriend.jpeg&quot; alt=&quot;1&quot;&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>2016年阅读书单</title>
+        <link>http://painterlin.com/2016/01/24/book-list-2016.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/book-list-2016.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description></description>
+      </item>
+    
+      <item>
+        <title>Python进阶学习书籍以及课程</title>
+        <link>http://painterlin.com/2016/01/24/python-books-and-course.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/python-books-and-course.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h3&gt;入门书籍&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://learnpythonthehardway.org/book/&quot;&gt;Learn Python The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;初级阶段&lt;/h3&gt;
+
+&lt;h3&gt;中级阶段&lt;/h3&gt;
+
+&lt;h3&gt;高级阶段&lt;/h3&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>如何使用git命令来管理github博客</title>
+        <link>http://painterlin.com/2016/01/24/how-to-using-github-command.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/how-to-using-github-command.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h3&gt;常用的提交修改的命令&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ git status
+$ git add -A
+$ git commit -m &quot;git log&quot;
+$ git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      </item>
+    
+      <item>
+        <title>机器学习/数据挖掘/自然语言处理课程</title>
+        <link>http://painterlin.com/2016/01/24/machine-learning-course.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/machine-learning-course.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;收集当前国外比较有名的机器学习，数据挖掘，自然语言处理，大数据，以及深度学习方面的课程，便于后面学习&lt;/p&gt;
+
+&lt;h3&gt;机器学习&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;stanford： &lt;a href=&quot;http://cs229.stanford.edu/&quot;&gt;cs229:machine learning&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;数据挖掘&lt;/h3&gt;
+
+&lt;h3&gt;自然语言处理&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224u/&quot;&gt;cs224u:natural langauge understanding&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224n/&quot;&gt;cs224n:natural language processing&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;深度学习&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;http://ufldl.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/li&gt;
+&lt;li&gt;http://deeplearning.net/&lt;/li&gt;
+&lt;li&gt;http://deeplearning.stanford.edu/tutorial/&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>武汉出差</title>
+        <link>http://painterlin.com/2016/01/24/on-business-in-wuhan.html</link>
+        <guid isPermaLink="true">http://painterlin.com/2016/01/24/on-business-in-wuhan.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;2015.12.1 ~ 2016.1.29: 出差武汉&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;以下谨记&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;h4&gt;宁静致远&lt;/h4&gt;
+
+&lt;h4&gt;潜心学习&lt;/h4&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;日常安排&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;努力工作&lt;/li&gt;
+&lt;li&gt;锻炼身体&lt;/li&gt;
+&lt;li&gt;多看书，多学习&lt;/li&gt;
+&lt;li&gt;多做，少说&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;下一步&lt;/h3&gt;
+
+&lt;p&gt;提升专业技能&lt;/p&gt;
+</description>
+      </item>
+    
+  </channel>
+</rss>
