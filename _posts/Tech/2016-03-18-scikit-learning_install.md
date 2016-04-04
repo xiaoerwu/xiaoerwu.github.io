@@ -2,7 +2,7 @@
 published: true
 layout: post
 title: Ubuntu下scikit-learning包的安装
-category: Python 
+category: Tech 
 tags: 
   - scikit-learning
   - python

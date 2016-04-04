@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>林安亚的博客</title>
-    <link>http://painterlin.com</link>
+    <title>伍小二的博客</title>
+    <link>http://xiaoerwu.github.io</link>
     <description>My personal blog</description>
     
       <item>
         <title>QEMU代码分析</title>
-        <link>http://painterlin.com/2016/03/20/qemu-notes.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/20/qemu-notes.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/20/qemu-notes.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/20/qemu-notes.html</guid>
         <pubDate>Sun, 20 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h2&gt;函数调用关系&lt;/h2&gt;
 
@@ -605,8 +605,8 @@
     
       <item>
         <title>C语言中constructor和destructor的用法</title>
-        <link>http://painterlin.com/2016/03/20/c-language-attribute-constructor-destructor.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/20/c-language-attribute-constructor-destructor.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/20/c-language-attribute-constructor-destructor.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/20/c-language-attribute-constructor-destructor.html</guid>
         <pubDate>Sun, 20 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;p&gt;__ attribute __((constructor)): 在main函数被调用之前调用
 注:调用之前，各个全局变量已经完成初始化。也就是说，这些函数是在全局变量初始化之后，main函数之前调用的。这一点是非常重要的，否则可能会引起很多的问题。&lt;/p&gt;
@@ -639,43 +639,9 @@
       </item>
     
       <item>
-        <title>CS专业经典课程书籍</title>
-        <link>http://painterlin.com/2016/03/18/reading-books.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/18/reading-books.html</guid>
-        <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
-        <description>&lt;h5&gt;Computer&lt;em&gt;Systems-A&lt;/em&gt;Programmers_Perspective(3rd)&lt;/h5&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Author: Randal E. Bryan &amp;amp; David R. O Hallaron
-Publish Date: 2016
-&lt;img src=&quot;https://img1.doubanio.com/lpic/s28051018.jpg&quot; alt=&quot;omputer Systems - A programmers perspective&quot;&gt;
-状态: 在读&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h5&gt;Operating System Concepts(9th)&lt;/h5&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Author: Abraham Silberschatz &amp;amp; Peter Bare Galvin &amp;amp; Greg Gagne
-Publish Date: 2013
-&lt;img src=&quot;https://img3.doubanio.com/lpic/s23003281.jpg&quot; alt=&quot;Operating System Concepts&quot;&gt;
-状态: 在读&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h5&gt;Computer Organization and Design(5th)&lt;/h5&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Author: David A. Patterson &amp;amp; John L. Hennessy
-Publish Date: 2014
-&lt;img src=&quot;https://img3.doubanio.com/lpic/s27212095.jpg&quot; alt=&quot;Computer Organization and Design&quot;&gt;
-状态: 在读&lt;/p&gt;
-&lt;/blockquote&gt;
-</description>
-      </item>
-    
-      <item>
         <title>Ubuntu下scikit-learning包的安装</title>
-        <link>http://painterlin.com/2016/03/18/scikit-learning-install.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/18/scikit-learning-install.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/18/scikit-learning-install.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/18/scikit-learning-install.html</guid>
         <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h2&gt;scikit-learn工具包安装&lt;/h2&gt;
 
@@ -704,8 +670,8 @@ $ nosetests -v sklearn
     
       <item>
         <title>CS专业经典课程书籍</title>
-        <link>http://painterlin.com/2016/03/18/reading-books.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/18/reading-books.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/18/reading-books.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/18/reading-books.html</guid>
         <pubDate>Fri, 18 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h5&gt;Computer&lt;em&gt;Systems-A&lt;/em&gt;Programmers_Perspective(3rd)&lt;/h5&gt;
 
@@ -738,8 +704,8 @@ Publish Date: 2014
     
       <item>
         <title>web scraping常用Python库</title>
-        <link>http://painterlin.com/2016/03/13/web-scraping.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/13/web-scraping.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/13/web-scraping.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/13/web-scraping.html</guid>
         <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h2&gt;web scraping常用python库&lt;/h2&gt;
 
@@ -822,8 +788,8 @@ Publish Date: 2014
     
       <item>
         <title>VIM阅读源代码常用命令</title>
-        <link>http://painterlin.com/2016/03/13/vim-common-commands.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/13/vim-common-commands.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/13/vim-common-commands.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/13/vim-common-commands.html</guid>
         <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h3&gt;&amp;quot;[[&amp;quot;和&amp;quot;]]&amp;quot;&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;[[: 跳转到当前光标所在位置的函数头
@@ -854,8 +820,8 @@ cc  --- 也是删除当前行，然后进入INSERT MODE
     
       <item>
         <title>Eclipse调试代码常用快捷键</title>
-        <link>http://painterlin.com/2016/03/13/eclpise-common-commands.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/13/eclpise-common-commands.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/13/eclpise-common-commands.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/13/eclpise-common-commands.html</guid>
         <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h2&gt;调试(Debug)&lt;/h2&gt;
 
@@ -921,8 +887,8 @@ cc  --- 也是删除当前行，然后进入INSERT MODE
     
       <item>
         <title>Longest Substring Without Repeating Characters</title>
-        <link>http://painterlin.com/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</guid>
+        <link>http://xiaoerwu.github.io/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/03/05/leetcode-add-two-num-longest-substring-without-repeating-characters.html</guid>
         <pubDate>Sat, 05 Mar 2016 00:00:00 +0800</pubDate>
         <description>&lt;h2&gt;题目&lt;/h2&gt;
 
@@ -962,31 +928,8 @@ cc  --- 也是删除当前行，然后进入INSERT MODE
     
       <item>
         <title>读书方法</title>
-        <link>http://painterlin.com/2016/01/27/methods-of-read-books.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/27/methods-of-read-books.html</guid>
-        <pubDate>Wed, 27 Jan 2016 00:00:00 +0800</pubDate>
-        <description>&lt;p&gt;当前读了很多数，手机中下载了很多的专业电子书，时不时的回去阅读，但是回头来看，却发现这些书的内容一点也记不起来。因此就在思考书该怎么看，才能从书中吸取对自己有价值的成分。如何摒弃粗制滥造的没有营养的书本。以下针对不同的读书目的应该有不同的读书方法，&lt;/p&gt;
-
-&lt;h3&gt;系统性的阅读&lt;/h3&gt;
-
-&lt;p&gt;这种方式的读书目的，是为了构建自己的知识体系结构，针对这种目的，需要系统的整本整本的把经典的书籍阅读完，此处强调要是经典的书。现在不管哪方面的书籍，市面上各种各样的琳琅满目， 因此，若是系统性的阅读书籍的话，选择经典型的书籍来阅读。&lt;/p&gt;
-
-&lt;p&gt;同时，列一个读书计划，每一个月应该读完什么书，每一个年应该完成多少本书本的阅读，以此来积累知识，构建完整的知识体系结构。&lt;/p&gt;
-
-&lt;p&gt;阅读的同时，需要善做记录，进行总结。&lt;/p&gt;
-
-&lt;h3&gt;针对性的阅读&lt;/h3&gt;
-
-&lt;p&gt;这种方式是为了解决某个问题，需要针对该问题的相关书籍进行阅读，那么就不需要从头开始阅读，只要对相关的内容进行阅读即可。可以节省时间。&lt;/p&gt;
-
-&lt;p&gt;对于这种方式的阅读，每完成一个问题的解决，就要针对该问题的相关内容进行总结，这样才能慢慢的积累。便于专业技能的提升。&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>读书方法</title>
-        <link>http://painterlin.com/2016/01/27/methods-of-read-books.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/27/methods-of-read-books.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/27/methods-of-read-books.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/27/methods-of-read-books.html</guid>
         <pubDate>Wed, 27 Jan 2016 00:00:00 +0800</pubDate>
         <description>&lt;p&gt;当前读了很多数，手机中下载了很多的专业电子书，时不时的回去阅读，但是回头来看，却发现这些书的内容一点也记不起来。因此就在思考书该怎么看，才能从书中吸取对自己有价值的成分。如何摒弃粗制滥造的没有营养的书本。以下针对不同的读书目的应该有不同的读书方法，&lt;/p&gt;
 
@@ -1008,8 +951,8 @@ cc  --- 也是删除当前行，然后进入INSERT MODE
     
       <item>
         <title>函数以及变量python练习</title>
-        <link>http://painterlin.com/2016/01/26/python-ex25-even-more-practice.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/26/python-ex25-even-more-practice.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/26/python-ex25-even-more-practice.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/26/python-ex25-even-more-practice.html</guid>
         <pubDate>Tue, 26 Jan 2016 00:00:00 +0800</pubDate>
         <description>&lt;p&gt;以下将对函数和变量的学习做更多的练习，以便很好的理解它们是如何使用的。&lt;/p&gt;
 
@@ -1096,9 +1039,41 @@ who
       </item>
     
       <item>
+        <title>Python进阶学习书籍以及课程</title>
+        <link>http://xiaoerwu.github.io/2016/01/24/python-books-and-course.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/python-books-and-course.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h3&gt;入门书籍&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://learnpythonthehardway.org/book/&quot;&gt;Learn Python The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;初级阶段&lt;/h3&gt;
+
+&lt;h3&gt;中级阶段&lt;/h3&gt;
+
+&lt;h3&gt;高级阶段&lt;/h3&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>如何使用git命令来管理github博客</title>
+        <link>http://xiaoerwu.github.io/2016/01/24/how-to-using-github-command.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/how-to-using-github-command.html</guid>
+        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
+        <description>&lt;h3&gt;常用的提交修改的命令&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ git status
+$ git add -A
+$ git commit -m &quot;git log&quot;
+$ git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      </item>
+    
+      <item>
         <title>机器学习/数据挖掘/自然语言处理课程</title>
-        <link>http://painterlin.com/2016/01/24/machine-learning-course.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/machine-learning-course.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/24/machine-learning-course.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/machine-learning-course.html</guid>
         <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
         <description>&lt;p&gt;收集当前国外比较有名的机器学习，数据挖掘，自然语言处理，大数据，以及深度学习方面的课程，便于后面学习&lt;/p&gt;
 
@@ -1129,8 +1104,8 @@ who
     
       <item>
         <title>武汉出差</title>
-        <link>http://painterlin.com/2016/01/24/on-business-in-wuhan.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/on-business-in-wuhan.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/24/on-business-in-wuhan.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/on-business-in-wuhan.html</guid>
         <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
         <description>&lt;blockquote&gt;
 &lt;p&gt;2015.12.1 ~ 2016.1.29: 出差武汉&lt;/p&gt;
@@ -1161,8 +1136,8 @@ who
     
       <item>
         <title>漂亮的女孩</title>
-        <link>http://painterlin.com/2016/01/24/girlfriend.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/girlfriend.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/24/girlfriend.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/girlfriend.html</guid>
         <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
         <description>&lt;p&gt;&lt;img src=&quot;/public/img/girlfriend.jpeg&quot; alt=&quot;1&quot;&gt;&lt;/p&gt;
 </description>
@@ -1170,106 +1145,10 @@ who
     
       <item>
         <title>2016年阅读书单</title>
-        <link>http://painterlin.com/2016/01/24/book-list-2016.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/book-list-2016.html</guid>
+        <link>http://xiaoerwu.github.io/2016/01/24/book-list-2016.html</link>
+        <guid isPermaLink="true">http://xiaoerwu.github.io/2016/01/24/book-list-2016.html</guid>
         <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
         <description></description>
-      </item>
-    
-      <item>
-        <title>Python进阶学习书籍以及课程</title>
-        <link>http://painterlin.com/2016/01/24/python-books-and-course.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/python-books-and-course.html</guid>
-        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
-        <description>&lt;h3&gt;入门书籍&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://learnpythonthehardway.org/book/&quot;&gt;Learn Python The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;初级阶段&lt;/h3&gt;
-
-&lt;h3&gt;中级阶段&lt;/h3&gt;
-
-&lt;h3&gt;高级阶段&lt;/h3&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>如何使用git命令来管理github博客</title>
-        <link>http://painterlin.com/2016/01/24/how-to-using-github-command.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/how-to-using-github-command.html</guid>
-        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
-        <description>&lt;h3&gt;常用的提交修改的命令&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ git status
-$ git add -A
-$ git commit -m &quot;git log&quot;
-$ git push -u origin master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-      </item>
-    
-      <item>
-        <title>机器学习/数据挖掘/自然语言处理课程</title>
-        <link>http://painterlin.com/2016/01/24/machine-learning-course.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/machine-learning-course.html</guid>
-        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
-        <description>&lt;p&gt;收集当前国外比较有名的机器学习，数据挖掘，自然语言处理，大数据，以及深度学习方面的课程，便于后面学习&lt;/p&gt;
-
-&lt;h3&gt;机器学习&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;stanford： &lt;a href=&quot;http://cs229.stanford.edu/&quot;&gt;cs229:machine learning&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;数据挖掘&lt;/h3&gt;
-
-&lt;h3&gt;自然语言处理&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224u/&quot;&gt;cs224u:natural langauge understanding&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;stanford: &lt;a href=&quot;https://web.stanford.edu/class/cs224n/&quot;&gt;cs224n:natural language processing&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;深度学习&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;http://ufldl.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/li&gt;
-&lt;li&gt;http://deeplearning.net/&lt;/li&gt;
-&lt;li&gt;http://deeplearning.stanford.edu/tutorial/&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>武汉出差</title>
-        <link>http://painterlin.com/2016/01/24/on-business-in-wuhan.html</link>
-        <guid isPermaLink="true">http://painterlin.com/2016/01/24/on-business-in-wuhan.html</guid>
-        <pubDate>Sun, 24 Jan 2016 00:00:00 +0800</pubDate>
-        <description>&lt;blockquote&gt;
-&lt;p&gt;2015.12.1 ~ 2016.1.29: 出差武汉&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3&gt;以下谨记&lt;/h3&gt;
-
-&lt;blockquote&gt;
-&lt;h4&gt;宁静致远&lt;/h4&gt;
-
-&lt;h4&gt;潜心学习&lt;/h4&gt;
-&lt;/blockquote&gt;
-
-&lt;h3&gt;日常安排&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;努力工作&lt;/li&gt;
-&lt;li&gt;锻炼身体&lt;/li&gt;
-&lt;li&gt;多看书，多学习&lt;/li&gt;
-&lt;li&gt;多做，少说&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;下一步&lt;/h3&gt;
-
-&lt;p&gt;提升专业技能&lt;/p&gt;
-</description>
       </item>
     
   </channel>

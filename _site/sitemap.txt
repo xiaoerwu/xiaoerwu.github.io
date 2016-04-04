@@ -9,13 +9,13 @@
 
   /sitemap.txt
 
+  /page2/
+
 
 
   /2016/03/20/qemu-notes.html
 
   /2016/03/20/c-language-attribute-constructor-destructor.html
-
-  /2016/03/18/reading-books.html
 
   /2016/03/18/scikit-learning-install.html
 
@@ -31,17 +31,7 @@
 
   /2016/01/27/methods-of-read-books.html
 
-  /2016/01/27/methods-of-read-books.html
-
   /2016/01/26/python-ex25-even-more-practice.html
-
-  /2016/01/24/machine-learning-course.html
-
-  /2016/01/24/on-business-in-wuhan.html
-
-  /2016/01/24/girlfriend.html
-
-  /2016/01/24/book-list-2016.html
 
   /2016/01/24/python-books-and-course.html
 

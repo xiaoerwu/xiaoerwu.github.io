@@ -2,7 +2,7 @@
 published: true
 layout: post
 title: VIM阅读源代码常用命令 
-category: vim
+category: Tech 
 tags: 
   - vim 
 time: 2016.03.13 14:22:00

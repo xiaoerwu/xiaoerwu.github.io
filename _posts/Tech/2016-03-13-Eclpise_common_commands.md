@@ -2,7 +2,7 @@
 published: true
 layout: post
 title: Eclipse调试代码常用快捷键
-category: Eclipse
+category: Tech 
 tags: 
   - cpp
   - c

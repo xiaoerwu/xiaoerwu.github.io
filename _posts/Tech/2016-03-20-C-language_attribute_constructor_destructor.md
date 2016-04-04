@@ -2,7 +2,7 @@
 published: true
 layout: post
 title: C语言中constructor和destructor的用法
-category: C
+category: Tech 
 tags: 
   - C
 time: 2016.03.18 23:02:45

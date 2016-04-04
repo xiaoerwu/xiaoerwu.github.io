@@ -2,7 +2,7 @@
 published: true
 layout: post
 title: web scraping常用Python库
-category: Python 
+category: Tech 
 tags: 
   - scikit-learning
   - urllib
